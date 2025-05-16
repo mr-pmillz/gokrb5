@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ropnop/gokrb5/messages"
-	"github.com/ropnop/gokrb5/types"
+	"github.com/mr-pmillz/gokrb5/messages"
+	"github.com/mr-pmillz/gokrb5/types"
 )
 
 // Cache for service tickets held by the client.

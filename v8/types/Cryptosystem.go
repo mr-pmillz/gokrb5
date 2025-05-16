@@ -4,7 +4,7 @@ import (
 	"crypto/rand"
 
 	"github.com/jcmturner/gofork/encoding/asn1"
-	"github.com/ropnop/gokrb5/v8/crypto/etype"
+	"github.com/mr-pmillz/gokrb5/v8/crypto/etype"
 )
 
 // Reference: https://www.ietf.org/rfc/rfc4120.txt

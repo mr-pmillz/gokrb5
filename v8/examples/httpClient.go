@@ -1,3 +1,4 @@
+//go:build examples
 // +build examples
 
 package main
@@ -10,11 +11,11 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/ropnop/gokrb5/v8/client"
-	"github.com/ropnop/gokrb5/v8/config"
-	"github.com/ropnop/gokrb5/v8/keytab"
-	"github.com/ropnop/gokrb5/v8/spnego"
-	"github.com/ropnop/gokrb5/v8/test/testdata"
+	"github.com/mr-pmillz/gokrb5/v8/client"
+	"github.com/mr-pmillz/gokrb5/v8/config"
+	"github.com/mr-pmillz/gokrb5/v8/keytab"
+	"github.com/mr-pmillz/gokrb5/v8/spnego"
+	"github.com/mr-pmillz/gokrb5/v8/test/testdata"
 )
 
 const (

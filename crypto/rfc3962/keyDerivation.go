@@ -6,7 +6,7 @@ import (
 	"errors"
 
 	"github.com/jcmturner/gofork/x/crypto/pbkdf2"
-	"github.com/ropnop/gokrb5/crypto/etype"
+	"github.com/mr-pmillz/gokrb5/crypto/etype"
 )
 
 const (

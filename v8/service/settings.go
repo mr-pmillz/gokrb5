@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ropnop/gokrb5/v8/keytab"
-	"github.com/ropnop/gokrb5/v8/types"
+	"github.com/mr-pmillz/gokrb5/v8/keytab"
+	"github.com/mr-pmillz/gokrb5/v8/types"
 )
 
 // Settings defines service side configuration settings.

@@ -1,13 +1,13 @@
 # gokrb5
 
-It is recommended to use the latest version: [![Version](https://img.shields.io/github/release/jcmturner/gokrb5.svg)](https://github.com/ropnop/gokrb5/releases)
+It is recommended to use the latest version: [![Version](https://img.shields.io/github/release/jcmturner/gokrb5.svg)](https://github.com/mr-pmillz/gokrb5/releases)
 
 Development will be focused on the latest major version. New features will only be targeted at this version.
 
 | Versions | Dependency Management | Import Path | Usage | Godoc | Go Report Card |
 |----------|-----------------------|-------------|-------|-------|----------------|
-| [![v8](https://github.com/ropnop/gokrb5/workflows/v8/badge.svg)](https://github.com/ropnop/gokrb5/actions?query=workflow%3Av8) | Go modules | import "github.com/ropnop/gokrb5/v8/{sub-package}" | [![Usage](https://img.shields.io/badge/v8-usage-blue)](https://github.com/ropnop/gokrb5/blob/master/v8/USAGE.md) | [![GoDoc](https://img.shields.io/badge/godoc-reference-blue)](https://pkg.go.dev/github.com/ropnop/gokrb5/v8) | [![Go Report Card](https://goreportcard.com/badge/github.com/ropnop/gokrb5/v8)](https://goreportcard.com/report/github.com/ropnop/gokrb5/v8) |
-| [![v7](https://github.com/ropnop/gokrb5/workflows/v7/badge.svg)](https://github.com/ropnop/gokrb5/actions?query=workflow%3Av7) | gopkg.in | import "github.com/ropnop/gokrb5/{sub-package}" | [![Usage](https://img.shields.io/badge/v7-usage-blue)](https://github.com/ropnop/gokrb5/blob/master/USAGE.md) | [![GoDoc](https://img.shields.io/badge/godoc-reference-blue)](https://pkg.go.dev/github.com/ropnop/gokrb5@v7.5.0+incompatible) | [![Go Report Card](https://goreportcard.com/badge/github.com/ropnop/gokrb5)](https://goreportcard.com/report/github.com/ropnop/gokrb5) |
+| [![v8](https://github.com/mr-pmillz/gokrb5/workflows/v8/badge.svg)](https://github.com/mr-pmillz/gokrb5/actions?query=workflow%3Av8) | Go modules | import "github.com/mr-pmillz/gokrb5/v8/{sub-package}" | [![Usage](https://img.shields.io/badge/v8-usage-blue)](https://github.com/mr-pmillz/gokrb5/blob/master/v8/USAGE.md) | [![GoDoc](https://img.shields.io/badge/godoc-reference-blue)](https://pkg.go.dev/github.com/mr-pmillz/gokrb5/v8) | [![Go Report Card](https://goreportcard.com/badge/github.com/mr-pmillz/gokrb5/v8)](https://goreportcard.com/report/github.com/mr-pmillz/gokrb5/v8) |
+| [![v7](https://github.com/mr-pmillz/gokrb5/workflows/v7/badge.svg)](https://github.com/mr-pmillz/gokrb5/actions?query=workflow%3Av7) | gopkg.in | import "github.com/mr-pmillz/gokrb5/{sub-package}" | [![Usage](https://img.shields.io/badge/v7-usage-blue)](https://github.com/mr-pmillz/gokrb5/blob/master/USAGE.md) | [![GoDoc](https://img.shields.io/badge/godoc-reference-blue)](https://pkg.go.dev/github.com/mr-pmillz/gokrb5@v7.5.0+incompatible) | [![Go Report Card](https://goreportcard.com/badge/github.com/mr-pmillz/gokrb5)](https://goreportcard.com/report/github.com/mr-pmillz/gokrb5) |
 
 
 #### Go Version Support
@@ -50,7 +50,7 @@ The following is working/tested:
 * Microsoft PAC Authorization Data is processed and exposed in the HTTP request context. Available if Microsoft Active Directory is used as the KDC.
 
 ## Contributing
-If you are interested in contributing to gokrb5, great! Please read the [contribution guidelines](https://github.com/ropnop/gokrb5/blob/master/CONTRIBUTING.md).
+If you are interested in contributing to gokrb5, great! Please read the [contribution guidelines](https://github.com/mr-pmillz/gokrb5/blob/master/CONTRIBUTING.md).
 
 ---
 
@@ -81,7 +81,7 @@ If you are interested in contributing to gokrb5, great! Please read the [contrib
 
 ## Contributing
 Thank you for your interest in contributing to gokrb5 please read the 
-[contribution guide](https://github.com/ropnop/gokrb5/blob/master/CONTRIBUTING.md) as it should help you get started.
+[contribution guide](https://github.com/mr-pmillz/gokrb5/blob/master/CONTRIBUTING.md) as it should help you get started.
 
 ## Known Issues
 | Issue | Worked around? | References |

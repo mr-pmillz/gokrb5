@@ -2,7 +2,7 @@ package kadmin
 
 import (
 	"github.com/jcmturner/gofork/encoding/asn1"
-	"github.com/ropnop/gokrb5/v8/types"
+	"github.com/mr-pmillz/gokrb5/v8/types"
 )
 
 // ChangePasswdData is the payload to a password change message.

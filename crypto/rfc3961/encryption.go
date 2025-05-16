@@ -9,8 +9,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ropnop/gokrb5/crypto/common"
-	"github.com/ropnop/gokrb5/crypto/etype"
+	"github.com/mr-pmillz/gokrb5/crypto/common"
+	"github.com/mr-pmillz/gokrb5/crypto/etype"
 )
 
 // DES3EncryptData encrypts the data provided using DES3 and methods specific to the etype provided.

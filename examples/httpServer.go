@@ -1,3 +1,4 @@
+//go:build examples
 // +build examples
 
 package main
@@ -9,10 +10,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/ropnop/gokrb5/keytab"
-	"github.com/ropnop/gokrb5/service"
-	"github.com/ropnop/gokrb5/spnego"
-	"github.com/ropnop/gokrb5/test/testdata"
+	"github.com/mr-pmillz/gokrb5/keytab"
+	"github.com/mr-pmillz/gokrb5/service"
+	"github.com/mr-pmillz/gokrb5/spnego"
+	"github.com/mr-pmillz/gokrb5/test/testdata"
 	goidentity "gopkg.in/jcmturner/goidentity.v3"
 )
 

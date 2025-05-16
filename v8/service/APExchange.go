@@ -3,9 +3,9 @@ package service
 import (
 	"time"
 
-	"github.com/ropnop/gokrb5/v8/credentials"
-	"github.com/ropnop/gokrb5/v8/iana/errorcode"
-	"github.com/ropnop/gokrb5/v8/messages"
+	"github.com/mr-pmillz/gokrb5/v8/credentials"
+	"github.com/mr-pmillz/gokrb5/v8/iana/errorcode"
+	"github.com/mr-pmillz/gokrb5/v8/messages"
 )
 
 // VerifyAPREQ verifies an AP_REQ sent to the service. Returns a boolean for if the AP_REQ is valid and the client's principal name and realm.

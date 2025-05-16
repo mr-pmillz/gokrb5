@@ -5,11 +5,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ropnop/gokrb5/v8/iana"
-	"github.com/ropnop/gokrb5/v8/iana/errorcode"
-	"github.com/ropnop/gokrb5/v8/iana/msgtype"
-	"github.com/ropnop/gokrb5/v8/iana/nametype"
-	"github.com/ropnop/gokrb5/v8/test/testdata"
+	"github.com/mr-pmillz/gokrb5/v8/iana"
+	"github.com/mr-pmillz/gokrb5/v8/iana/errorcode"
+	"github.com/mr-pmillz/gokrb5/v8/iana/msgtype"
+	"github.com/mr-pmillz/gokrb5/v8/iana/nametype"
+	"github.com/mr-pmillz/gokrb5/v8/test/testdata"
 	"github.com/stretchr/testify/assert"
 )
 

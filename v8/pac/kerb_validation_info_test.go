@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/jcmturner/rpc/v2/mstypes"
-	"github.com/ropnop/gokrb5/v8/test/testdata"
+	"github.com/mr-pmillz/gokrb5/v8/test/testdata"
 	"github.com/stretchr/testify/assert"
 )
 

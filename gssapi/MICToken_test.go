@@ -5,8 +5,8 @@ import (
 	"encoding/hex"
 	"testing"
 
-	"github.com/ropnop/gokrb5/iana/keyusage"
-	"github.com/ropnop/gokrb5/types"
+	"github.com/mr-pmillz/gokrb5/iana/keyusage"
+	"github.com/mr-pmillz/gokrb5/types"
 	"github.com/stretchr/testify/assert"
 )
 

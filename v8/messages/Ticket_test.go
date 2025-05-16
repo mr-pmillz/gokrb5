@@ -8,14 +8,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ropnop/gokrb5/v8/iana"
-	"github.com/ropnop/gokrb5/v8/iana/addrtype"
-	"github.com/ropnop/gokrb5/v8/iana/adtype"
-	"github.com/ropnop/gokrb5/v8/iana/nametype"
-	"github.com/ropnop/gokrb5/v8/iana/trtype"
-	"github.com/ropnop/gokrb5/v8/keytab"
-	"github.com/ropnop/gokrb5/v8/test/testdata"
-	"github.com/ropnop/gokrb5/v8/types"
+	"github.com/mr-pmillz/gokrb5/v8/iana"
+	"github.com/mr-pmillz/gokrb5/v8/iana/addrtype"
+	"github.com/mr-pmillz/gokrb5/v8/iana/adtype"
+	"github.com/mr-pmillz/gokrb5/v8/iana/nametype"
+	"github.com/mr-pmillz/gokrb5/v8/iana/trtype"
+	"github.com/mr-pmillz/gokrb5/v8/keytab"
+	"github.com/mr-pmillz/gokrb5/v8/test/testdata"
+	"github.com/mr-pmillz/gokrb5/v8/types"
 	"github.com/stretchr/testify/assert"
 )
 

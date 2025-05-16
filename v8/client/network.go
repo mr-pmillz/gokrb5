@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ropnop/gokrb5/v8/iana/errorcode"
-	"github.com/ropnop/gokrb5/v8/messages"
+	"github.com/mr-pmillz/gokrb5/v8/iana/errorcode"
+	"github.com/mr-pmillz/gokrb5/v8/messages"
 )
 
 func (cl *Client) SendToKDC(b []byte, realm string) ([]byte, error) {

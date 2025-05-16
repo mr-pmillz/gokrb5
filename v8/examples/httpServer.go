@@ -1,3 +1,4 @@
+//go:build examples
 // +build examples
 
 package main
@@ -12,10 +13,10 @@ import (
 
 	"github.com/gorilla/sessions"
 	"github.com/jcmturner/goidentity/v6"
-	"github.com/ropnop/gokrb5/v8/keytab"
-	"github.com/ropnop/gokrb5/v8/service"
-	"github.com/ropnop/gokrb5/v8/spnego"
-	"github.com/ropnop/gokrb5/v8/test/testdata"
+	"github.com/mr-pmillz/gokrb5/v8/keytab"
+	"github.com/mr-pmillz/gokrb5/v8/service"
+	"github.com/mr-pmillz/gokrb5/v8/spnego"
+	"github.com/mr-pmillz/gokrb5/v8/test/testdata"
 )
 
 const (
