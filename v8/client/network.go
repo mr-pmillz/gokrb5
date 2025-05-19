@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"encoding/binary"
 	"errors"
 	"fmt"
@@ -79,7 +80,7 @@ func (cl *Client) sendKDCUDP(realm string, b []byte) ([]byte, error) {
 	if err != nil {
 		return r, err
 	}
-	r, err = dialSendUDP(kdcs, b)
+	r, err = cl.dialSendUDP(kdcs, b)
 	if err != nil {
 		return r, err
 	}
@@ -87,8 +88,17 @@ func (cl *Client) sendKDCUDP(realm string, b []byte) ([]byte, error) {
 }
 
 // dialSendUDP establishes a UDP connection to a KDC.
-func dialSendUDP(kdcs map[int]string, b []byte) ([]byte, error) {
+func (cl *Client) dialSendUDP(kdcs map[int]string, b []byte) ([]byte, error) {
 	var errs []string
+	// Get the dialer from the config
+	dialer := cl.Config.GetDialer()
+
+	// Create context for dialing
+	ctx := context.Background()
+	if cl.Config.Ctx != nil {
+		ctx = cl.Config.Ctx
+	}
+
 	for i := 1; i <= len(kdcs); i++ {
 		udpAddr, err := net.ResolveUDPAddr("udp", kdcs[i])
 		if err != nil {
@@ -96,19 +106,23 @@ func dialSendUDP(kdcs map[int]string, b []byte) ([]byte, error) {
 			continue
 		}
 
-		conn, err := net.DialTimeout("udp", udpAddr.String(), 5*time.Second)
+		// Use dialer with context for connection
+		conn, err := dialer(ctx, "udp", udpAddr.String())
 		if err != nil {
-			errs = append(errs, fmt.Sprintf("error setting dial timeout on connection to %s: %v", kdcs[i], err))
+			errs = append(errs, fmt.Sprintf("error dialing connection to %s: %v", kdcs[i], err))
 			continue
 		}
+
 		if err := conn.SetDeadline(time.Now().Add(5 * time.Second)); err != nil {
+			conn.Close()
 			errs = append(errs, fmt.Sprintf("error setting deadline on connection to %s: %v", kdcs[i], err))
 			continue
 		}
-		// conn is guaranteed to be a UDPConn
-		rb, err := sendUDP(conn.(*net.UDPConn), b)
+
+		// Send data via UDP
+		rb, err := sendUDP(conn, b)
 		if err != nil {
-			errs = append(errs, fmt.Sprintf("error sneding to %s: %v", kdcs[i], err))
+			errs = append(errs, fmt.Sprintf("error sending to %s: %v", kdcs[i], err))
 			continue
 		}
 		return rb, nil
@@ -117,7 +131,7 @@ func dialSendUDP(kdcs map[int]string, b []byte) ([]byte, error) {
 }
 
 // sendUDP sends bytes to connection over UDP.
-func sendUDP(conn *net.UDPConn, b []byte) ([]byte, error) {
+func sendUDP(conn net.Conn, b []byte) ([]byte, error) {
 	var r []byte
 	defer conn.Close()
 	_, err := conn.Write(b)
@@ -125,11 +139,14 @@ func sendUDP(conn *net.UDPConn, b []byte) ([]byte, error) {
 		return r, fmt.Errorf("error sending to (%s): %v", conn.RemoteAddr().String(), err)
 	}
 	udpbuf := make([]byte, 4096)
-	n, _, err := conn.ReadFrom(udpbuf)
-	r = udpbuf[:n]
+
+	// For UDP connections we need to read directly
+	n, err := conn.Read(udpbuf)
 	if err != nil {
 		return r, fmt.Errorf("sending over UDP failed to %s: %v", conn.RemoteAddr().String(), err)
 	}
+
+	r = udpbuf[:n]
 	if len(r) < 1 {
 		return r, fmt.Errorf("no response data from %s", conn.RemoteAddr().String())
 	}
@@ -143,36 +160,43 @@ func (cl *Client) sendKDCTCP(realm string, b []byte) ([]byte, error) {
 	if err != nil {
 		return r, err
 	}
-	r, err = dialSendTCP(kdcs, b)
+	r, err = cl.dialSendTCP(kdcs, b)
 	if err != nil {
 		return r, err
 	}
 	return checkForKRBError(r)
 }
 
-// dialKDCTCP establishes a TCP connection to a KDC.
-func dialSendTCP(kdcs map[int]string, b []byte) ([]byte, error) {
+// dialSendTCP establishes a TCP connection to a KDC.
+func (cl *Client) dialSendTCP(kdcs map[int]string, b []byte) ([]byte, error) {
 	var errs []string
+	// Get the dialer from the config
+	dialer := cl.Config.GetDialer()
+
+	// Create context for dialing
+	ctx := context.Background()
+	if cl.Config.Ctx != nil {
+		ctx = cl.Config.Ctx
+	}
+
 	for i := 1; i <= len(kdcs); i++ {
-		tcpAddr, err := net.ResolveTCPAddr("tcp", kdcs[i])
+		// Use dialer with context for connection
+		conn, err := dialer(ctx, "tcp", kdcs[i])
 		if err != nil {
-			errs = append(errs, fmt.Sprintf("error resolving KDC address: %v", err))
+			errs = append(errs, fmt.Sprintf("error dialing connection to %s: %v", kdcs[i], err))
 			continue
 		}
 
-		conn, err := net.DialTimeout("tcp", tcpAddr.String(), 5*time.Second)
-		if err != nil {
-			errs = append(errs, fmt.Sprintf("error setting dial timeout on connection to %s: %v", kdcs[i], err))
-			continue
-		}
 		if err := conn.SetDeadline(time.Now().Add(5 * time.Second)); err != nil {
+			conn.Close()
 			errs = append(errs, fmt.Sprintf("error setting deadline on connection to %s: %v", kdcs[i], err))
 			continue
 		}
-		// conn is guaranteed to be a TCPConn
-		rb, err := sendTCP(conn.(*net.TCPConn), b)
+
+		// Send data via TCP
+		rb, err := sendTCP(conn, b)
 		if err != nil {
-			errs = append(errs, fmt.Sprintf("error sneding to %s: %v", kdcs[i], err))
+			errs = append(errs, fmt.Sprintf("error sending to %s: %v", kdcs[i], err))
 			continue
 		}
 		return rb, nil
@@ -181,7 +205,7 @@ func dialSendTCP(kdcs map[int]string, b []byte) ([]byte, error) {
 }
 
 // sendTCP sends bytes to connection over TCP.
-func sendTCP(conn *net.TCPConn, b []byte) ([]byte, error) {
+func sendTCP(conn net.Conn, b []byte) ([]byte, error) {
 	defer conn.Close()
 	var r []byte
 	// RFC 4120 7.2.2 specifies the first 4 bytes indicate the length of the message in big endian order.

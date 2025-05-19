@@ -3,10 +3,12 @@ package config
 
 import (
 	"bufio"
+	"context"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"golang.org/x/net/proxy"
 	"io"
 	"net"
 	"os"
@@ -25,9 +27,121 @@ type Config struct {
 	LibDefaults LibDefaults
 	Realms      []Realm
 	DomainRealm DomainRealm
+	Socks5      *Socks5Config   // Added SOCKS5 proxy configuration
+	Ctx         context.Context // Store the context for network operations
 	//CaPaths
 	//AppDefaults
 	//Plugins
+}
+
+// Socks5Config represents configuration for a SOCKS5 proxy.
+type Socks5Config struct {
+	Address  string // Address of the SOCKS5 proxy in format "host:port"
+	Username string // Optional username for authentication
+	Password string // Optional password for authentication
+	Enabled  bool   // Whether the SOCKS5 proxy is enabled
+}
+
+// WithContext returns a copy of the config that uses the provided context
+// for network operations. This is particularly useful when using a SOCKS5 proxy.
+func (c *Config) WithContext(ctx context.Context) *Config {
+	if ctx == nil {
+		return c
+	}
+
+	// Create a copy of the config
+	configCopy := &Config{
+		LibDefaults: c.LibDefaults,
+		Realms:      c.Realms,
+		DomainRealm: c.DomainRealm,
+		Ctx:         ctx, // Store the context
+	}
+
+	// Copy the SOCKS5 config if it exists
+	if c.Socks5 != nil {
+		configCopy.Socks5 = &Socks5Config{
+			Address:  c.Socks5.Address,
+			Username: c.Socks5.Username,
+			Password: c.Socks5.Password,
+			Enabled:  c.Socks5.Enabled,
+		}
+	}
+
+	return configCopy
+}
+
+// EnableSocks5 enables SOCKS5 proxy with the provided configuration.
+func (c *Config) EnableSocks5(address, username, password string) {
+	c.Socks5 = &Socks5Config{
+		Address:  address,
+		Username: username,
+		Password: password,
+		Enabled:  true,
+	}
+}
+
+// DisableSocks5 disables the SOCKS5 proxy if it was enabled.
+func (c *Config) DisableSocks5() {
+	if c.Socks5 != nil {
+		c.Socks5.Enabled = false
+	}
+}
+
+// GetDialer returns a dialer function that uses the context and SOCKS5 proxy if configured.
+func (c *Config) GetDialer() func(context.Context, string, string) (net.Conn, error) {
+	// Use the stored context if available, otherwise create a background context
+	ctx := context.Background()
+	if c.Ctx != nil {
+		ctx = c.Ctx
+	}
+
+	// If SOCKS5 is not configured or not enabled, return standard dialer
+	if c.Socks5 == nil || !c.Socks5.Enabled || c.Socks5.Address == "" {
+		return (&net.Dialer{}).DialContext
+	}
+
+	// Create auth if username/password provided
+	var auth *proxy.Auth
+	if c.Socks5.Username != "" || c.Socks5.Password != "" {
+		auth = &proxy.Auth{
+			User:     c.Socks5.Username,
+			Password: c.Socks5.Password,
+		}
+	}
+
+	// Create a dialer with the SOCKS5 proxy
+	baseDialer := &net.Dialer{
+		Timeout:   30 * time.Second,
+		KeepAlive: 30 * time.Second,
+	}
+
+	// Apply deadline from context if available
+	if deadline, ok := ctx.Deadline(); ok {
+		baseDialer.Timeout = time.Until(deadline)
+	}
+
+	// Create the SOCKS5 proxy dialer
+	socks5Dialer, err := proxy.SOCKS5("tcp", c.Socks5.Address, auth, baseDialer)
+	if err != nil {
+		// Fall back to direct connection if proxy setup fails
+		return baseDialer.DialContext
+	}
+
+	// Create a context-aware wrapper for the SOCKS5 dialer
+	return func(ctx context.Context, network, addr string) (net.Conn, error) {
+		// Check if context has been canceled
+		if ctx.Err() != nil {
+			return nil, ctx.Err()
+		}
+
+		// Set timeout from context if available
+		if deadline, ok := ctx.Deadline(); ok {
+			baseDialer.Timeout = time.Until(deadline)
+		}
+
+		// Use the SOCKS5 dialer
+		return socks5Dialer.Dial(network, addr)
+	}
 }
 
 // WeakETypeList is a list of encryption types that have been deemed weak.
@@ -39,6 +153,7 @@ func New() *Config {
 	return &Config{
 		LibDefaults: newLibDefaults(),
 		DomainRealm: d,
+		Socks5:      nil, // Initialize to nil, can be set later if needed
 	}
 }
 
